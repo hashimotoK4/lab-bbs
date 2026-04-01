@@ -39,30 +39,34 @@ posts = db.collection("posts").order_by("timestamp", direction=firestore.Query.D
 for post in posts:
     p_id = post.id
     p = post.to_dict()
-    
-    with st.expander(f"💬 {p.get('name')} : {p.get('content')[:20]}...", expanded=True):
+    replies = p.get('replies', [])
+
+    with st.container(border=True):
+        st.markdown(f"### 👤 {p.get('name')}")
         st.write(p.get('content'))
         
-        # --- いいね機能 ---
-        col1, col2 = st.columns([1, 4])
-        with col1:
-            if st.button(f"❤️ {p.get('likes', 0)}", key=f"like_{p_id}"):
+       
+        if st.button(f"❤️ {p.get('likes', 0)}", key=f"like_{p_id}"):
                 db.collection("posts").document(p_id).update({"likes": firestore.Increment(1)})
                 st.rerun()
         
         # --- リプライ表示 ---
-        replies = p.get('replies', [])
-        for r in replies:
-            st.markdown(f"┗ **{r['name']}**: {r['content']}")
+        if replies:
+            # 返信がある場合だけ「n件の返信を表示」という折りたたみを作る
+            with st.expander(f"▼ 返信 {len(replies)} 件を表示"):
+                for r in replies:
+                    st.markdown(f"  **{r['name']}**: {r['content']}")
+                    st.caption(f"  _{r.get('at', '')[:10]}_") # 日付を薄く表示
         
-        # --- リプライ入力 ---
-        with st.form(key=f"reply_form_{p_id}", clear_on_submit=True):
-            r_name = st.text_input("名前", key=f"rname_{p_id}", value="匿名希望")
-            r_msg = st.text_input("返信内容", key=f"rmsg_{p_id}")
-            if st.form_submit_button("返信"):
-                if r_name and r_msg:
-                    new_reply = {"name": r_name, "content": r_msg, "at": datetime.now().isoformat()}
-                    db.collection("posts").document(p_id).update({
-                        "replies": firestore.ArrayUnion([new_reply])
-                    })
-                    st.rerun()
+        # --- 返信を入力するボタン ---
+        with st.expander("💬 返信を書く"):
+            with st.form(key=f"reply_form_{p_id}", clear_on_submit=True):
+                r_name = st.text_input("名前", key=f"rn_{p_id}", value="界翔")
+                r_msg = st.text_input("返信内容", key=f"rm_{p_id}")
+                if st.form_submit_button("送信"):
+                    if r_name and r_msg:
+                        new_reply = {"name": r_name, "content": r_msg, "at": datetime.now().isoformat()}
+                        db.collection("posts").document(p_id).update({
+                            "replies": firestore.ArrayUnion([new_reply])
+                        })
+                        st.rerun()
