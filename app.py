@@ -1,11 +1,20 @@
 import streamlit as st
 import firebase_admin
 from firebase_admin import credentials, firestore
+import json # これを追加
 
-# --- Firebaseの初期化 ---
+# Firebaseの初期化
 if not firebase_admin._apps:
-    # 先ほど移動したJSONファイルを読み込む
-    cred = credentials.Certificate("serviceAccountKey.json")
+    # SecretsからJSONの塊を取り出す
+    raw_json = st.secrets["firebase"]["json_data"]
+    
+    # 文字列を辞書形式に変換
+    firebase_info = json.loads(raw_json)
+    
+    # 秘密鍵の改行コードだけは念のため修正
+    firebase_info["private_key"] = firebase_info["private_key"].replace("\\n", "\n")
+    
+    cred = credentials.Certificate(firebase_info)
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
