@@ -26,7 +26,7 @@ st.title("🚀 研究室 掲示板")
 # 入力フォーム
 with st.form("my_form", clear_on_submit=True):
     st.subheader("新しい投稿")
-    user_name = st.text_input("名前", placeholder="界翔")
+    user_name = st.text_input("名前", placeholder="匿名希望")
     message = st.text_area("メッセージ", placeholder="ここに内容を入力...")
     submit_button = st.form_submit_button("送信する")
 
