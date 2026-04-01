@@ -61,7 +61,7 @@ for post in posts:
         # --- 返信を入力するボタン ---
         with st.expander("💬 返信を書く"):
             with st.form(key=f"reply_form_{p_id}", clear_on_submit=True):
-                r_name = st.text_input("名前", key=f"rn_{p_id}", value="界翔")
+                r_name = st.text_input("名前", key=f"rn_{p_id}", value="匿名希望")
                 r_msg = st.text_input("返信内容", key=f"rm_{p_id}")
                 if st.form_submit_button("送信"):
                     if r_name and r_msg:
