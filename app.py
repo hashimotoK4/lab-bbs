@@ -14,12 +14,12 @@ if not firebase_admin._apps:
 
 db = firestore.client()
 
-st.set_page_config(page_title="研究室掲示板 Pro", layout="centered")
+st.set_page_config(page_title="研究室掲示板", layout="centered")
 st.title("🚀 研究室 掲示板")
 
 # --- 投稿フォーム ---
 with st.form("main_form", clear_on_submit=True):
-    user_name = st.text_input("名前", placeholder="界翔")
+    user_name = st.text_input("名前", placeholder="匿名希望")
     message = st.text_area("メッセージ")
     if st.form_submit_button("投稿する") and user_name and message:
         db.collection("posts").add({
@@ -57,7 +57,7 @@ for post in posts:
         
         # --- リプライ入力 ---
         with st.form(key=f"reply_form_{p_id}", clear_on_submit=True):
-            r_name = st.text_input("名前", key=f"rname_{p_id}", value="界翔")
+            r_name = st.text_input("名前", key=f"rname_{p_id}", value="匿名希望")
             r_msg = st.text_input("返信内容", key=f"rmsg_{p_id}")
             if st.form_submit_button("返信"):
                 if r_name and r_msg:
