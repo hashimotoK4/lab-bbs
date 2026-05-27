@@ -21,12 +21,9 @@ st.set_page_config(page_title="研究室掲示板", layout="centered")
 # ==========================================
 st.title("🚀 研究室 掲示板")
 
-st.caption("在室管理は別ページに移動します。")
+st.caption("在室管理は別ページに移動します。現在変更中")
 
-try:
-    st.page_link("pages/check.py", label="👀 研究室在室管理ページを開く", icon="👀")
-except Exception:
-    st.info("左側のサイドバーから「研究室在室管理」ページを選択してください。現在変更中です")
+st.markdown("## [👀 研究室在室管理ページを開く](./check)")
 
 # --- 投稿フォーム ---
 with st.form("main_form", clear_on_submit=True):
