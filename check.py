@@ -13,9 +13,9 @@ STATUS = {
 }
 
 INITIAL_ROOMS = [
-    {"id": "main_lab", "name": "メイン研究室", "room_no": "301号室", "order": 1, "capacity": 10},
-    {"id": "student_room", "name": "学生演習室", "room_no": "302号室", "order": 2, "capacity": 10},
-    {"id": "discussion_room", "name": "共同開発・ディスカッション室", "room_no": "", "order": 3, "capacity": 10},
+    {"id": "main_lab", "name": "堺研究室", "room_no": "A629", "order": 1, "capacity": 10},
+    {"id": "student_room", "name": "大塚研究室", "room_no": "A626", "order": 2, "capacity": 10},
+    {"id": "discussion_room", "name": "土肥開発室", "room_no": "A423", "order": 3, "capacity": 10},
 ]
 
 
@@ -154,7 +154,7 @@ def show_check_page():
     home_count = sum(1 for m in all_members if m.get("status") == "home")
 
     c1, c2, c3, c4 = st.columns([2, 1, 1, 1])
-    c1.info(f"🕒 最終表示更新: {now_text()}")
+    c1.info(f"👥 登録メンバー {len(all_members)}人")
     c2.success(f"在室 {present_count}人")
     c3.warning(f"外出 {out_count}人")
     c4.info(f"帰宅 {home_count}人")
