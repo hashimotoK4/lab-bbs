@@ -19,8 +19,10 @@ INITIAL_ROOMS = [
 ]
 
 
+JST = timezone(timedelta(hours=9))
+
 def now_text():
-    return datetime.now().strftime("%H:%M")
+    return datetime.now(JST).strftime("%H:%M")
 
 
 def init_rooms():
