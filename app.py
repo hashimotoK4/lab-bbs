@@ -15,6 +15,46 @@ if not firebase_admin._apps:
 db = firestore.client()
 
 st.set_page_config(page_title="研究室掲示板", layout="centered")
+
+# ==========================================
+# 🆕 在室状況の管理（サイドバー）
+# ==========================================
+st.sidebar.title("👀 現在のメンバー状況")
+
+# --- 自分の状況を更新するフォーム ---
+with st.sidebar.expander("📝 自分の状況を更新", expanded=True):
+    with st.form("status_update_form", clear_on_submit=False):
+        status_name = st.text_input("名前", placeholder="あなたの名前")
+        status_state = st.selectbox("現在の状態", ["🏫 在室", "🏠 帰宅", "☕ 休憩", "💻 リモート", "🧪 実験中"])
+        
+        if st.form_submit_button("更新する") and status_name:
+            # 名前をドキュメントIDに指定して、常にその人のデータを上書き（set）する
+            db.collection("members").document(status_name).set({
+                "name": status_name,
+                "status": status_state,
+                "updated_at": firestore.SERVER_TIMESTAMP
+            })
+            st.rerun()
+
+st.sidebar.divider()
+
+# --- 現在の状況一覧を表示 ---
+# 状態順や名前順に並び替えて取得
+members = db.collection("members").order_by("status").stream()
+
+status_count = 0
+for m in members:
+    m_data = m.to_dict()
+    # 例: 「🏫 在室 : 山田」のように表示
+    st.sidebar.markdown(f"{m_data.get('status')} : **{m_data.get('name')}**")
+    status_count += 1
+
+if status_count == 0:
+    st.sidebar.caption("まだ誰も状況を登録していません。")
+
+# ==========================================
+# メイン画面：掲示板
+# ==========================================
 st.title("🚀 研究室 掲示板")
 
 # --- 投稿フォーム ---
@@ -45,8 +85,8 @@ for post in posts:
         st.markdown(f"### 👤 {p.get('name')}")
         st.write(p.get('content'))
         
-       
         if st.button(f"❤️ {p.get('likes', 0)}", key=f"like_{p_id}"):
+                # 📝 updateを使用していいね数をインクリメント
                 db.collection("posts").document(p_id).update({"likes": firestore.Increment(1)})
                 st.rerun()
         
