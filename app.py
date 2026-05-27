@@ -26,6 +26,7 @@ st.caption("在室管理は別ページに移動します。")
 try:
     st.page_link("pages/check.py", label="👀 研究室在室管理ページを開く", icon="👀")
 except Exception:
+    st.info("左側のサイドバーから「研究室在室管理」ページを選択してください。現在変更中です")
 
 # --- 投稿フォーム ---
 with st.form("main_form", clear_on_submit=True):
