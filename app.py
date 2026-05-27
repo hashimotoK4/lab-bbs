@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json
 from datetime import datetime
+from check import show_check_page
 
 # Firebaseの初期化（前回の設定を維持）
 if not firebase_admin._apps:
@@ -19,11 +20,17 @@ st.set_page_config(page_title="研究室掲示板", layout="centered")
 # ==========================================
 # メイン画面：掲示板
 # ==========================================
+query_params = st.query_params
+
+if query_params.get("page") == "check":
+    show_check_page()
+    st.stop()
+
 st.title("🚀 研究室 掲示板")
 
 st.caption("在室管理は別ページに移動します。現在変更中")
 
-st.markdown("## [👀 研究室在室管理ページを開く](./check)")
+st.markdown("## [👀 研究室在室管理ページを開く](?page=check)")
 
 # --- 投稿フォーム ---
 with st.form("main_form", clear_on_submit=True):
