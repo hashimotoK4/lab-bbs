@@ -25,7 +25,7 @@ st.sidebar.title("👀 現在のメンバー状況")
 with st.sidebar.expander("📝 自分の状況を更新", expanded=True):
     with st.form("status_update_form", clear_on_submit=False):
         status_name = st.text_input("名前", placeholder="あなたの名前")
-        status_state = st.selectbox("現在の状態", ["🏫 在室", "🏠 帰宅", "☕ 休憩", "💻 リモート", "🧪 実験中"])
+        status_state = st.selectbox("現在の状態", ["🏫 在室", "🏠 帰宅", "☕ 休憩", "食事", "講義&TA"])
         
         if st.form_submit_button("更新する") and status_name:
             # 名前をドキュメントIDに指定して、常にその人のデータを上書き（set）する
