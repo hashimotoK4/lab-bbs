@@ -28,7 +28,7 @@ if query_params.get("page") == "check":
 
 st.title("🚀 研究室 掲示板")
 
-st.caption("在室管理は別ページに移動します。現在変更中")
+st.caption("在室管理は別ページに移動します。")
 
 st.markdown("## [👀 研究室在室管理ページを開く](?page=check)")
 
