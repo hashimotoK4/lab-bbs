@@ -2,7 +2,6 @@ import streamlit as st
 from firebase_admin import firestore
 from datetime import datetime, timedelta, timezone
 
-db = firestore.client()
 
 ROOMS_COLLECTION = "labstatus_rooms"
 
@@ -90,6 +89,8 @@ def reset_all_home(rooms):
 
 
 def show_check_page():
+    global db
+    db = firestore.client()
     st.markdown(
         """
         <style>
